@@ -33,13 +33,22 @@ $factory->define(App\Budget::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Income::class, function (Faker\Generator $faker) {
-    static $budget_id;
+    return [
+        'title'           => $faker->sentence,
+        'amount_planned'  => $faker->numberBetween(1000, 10000),
+        'amount_received' => $faker->numberBetween(1000, 10000),
+        'budget_id'       => function () {
+            return factory(App\Budget::class)->create()->id;
+        },
+    ];
+});
 
+$factory->define(App\Expense::class, function (Faker\Generator $faker) {
     return [
         'title'          => $faker->sentence,
-        'value_planned'  => $faker->numberBetween(1000, 10000),
-        'value_received' => $faker->numberBetween(1000, 10000),
-        'budget_id'      => $budget_id ?: function () {
+        'amount_planned' => $faker->numberBetween(1000, 10000),
+        'amount_spent'   => $faker->numberBetween(1000, 10000),
+        'budget_id'      => function () {
             return factory(App\Budget::class)->create()->id;
         },
     ];

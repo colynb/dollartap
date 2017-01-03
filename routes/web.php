@@ -21,3 +21,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('budget', 'BudgetController');
 Route::resource('budget.income', 'IncomeController');
+Route::resource('budget.expenses', 'ExpenseController');

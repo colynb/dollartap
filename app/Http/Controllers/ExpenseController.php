@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Budget;
-use App\Income;
+use App\Expense;
 use Illuminate\Http\Request;
 
-class IncomeController extends Controller
+class ExpenseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,19 +36,20 @@ class IncomeController extends Controller
      */
     public function store(Budget $budget, Request $request)
     {
+
         $this->validate($request, [
-            'income_title'    => 'required',
-            'income_planned'  => 'required',
-            'income_received' => 'required',
+            'expense_title'   => 'required',
+            'expense_planned' => 'required',
+            'expense_spent'   => 'required',
         ]);
 
-        $budget->addIncome(new Income([
-            'title'           => $request->get('income_title'),
-            'amount_planned'  => to_pennies($request->get('income_planned')),
-            'amount_received' => to_pennies($request->get('income_received')),
+        $budget->addExpense(new Expense([
+            'title'          => $request->get('expense_title'),
+            'amount_planned' => to_pennies($request->get('expense_planned')),
+            'amount_spent'   => to_pennies($request->get('expense_spent')),
         ]));
 
-        return redirect()->route('budget.show', $budget)->withSuccess('Income added!');
+        return redirect()->route('budget.show', $budget)->withSuccess('Expense added!');
 
     }
 
@@ -96,5 +97,4 @@ class IncomeController extends Controller
     {
         //
     }
-
 }

@@ -13,16 +13,21 @@ class AddBudgetIncomeTest extends TestCase
     /** @test */
     public function a_user_can_see_income_list()
     {
+        // $this->disableExceptionHandling();
         $user   = factory(User::class)->create();
         $budget = factory(Budget::class)->make();
         $user->addBudget($budget);
 
-        $budget->addIncome(factory(Income::class)->make(['title' => 'Colyn', 'value_planned' => '10000', 'value_received' => 0]));
+        $budget->addIncome(factory(Income::class)->make([
+            'title'           => 'Colyn',
+            'amount_planned'  => '1000000', // cents
+            'amount_received' => 0,
+        ]));
 
         $this->visitRoute('budget.show', $budget)
             ->see('Income')
             ->see('Colyn')
-            ->see('10000');
+            ->see('10,000.00');
     }
 
     /** @test */
@@ -43,13 +48,13 @@ class AddBudgetIncomeTest extends TestCase
             ->press('Add Income');
 
         $this->see('Colyn')
-            ->see('10000');
+            ->see('10,000');
 
         $this->seeInDatabase('income', [
-            'budget_id'      => $budget->id,
-            'title'          => 'Colyn',
-            'value_planned'  => 10000,
-            'value_received' => 0,
+            'budget_id'       => $budget->id,
+            'title'           => 'Colyn',
+            'amount_planned'  => 1000000,
+            'amount_received' => 0,
         ]);
     }
 }
